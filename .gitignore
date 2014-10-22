@@ -1,3 +1,6 @@
+# Eclipse
+*.classpath
+
 # Compiled Object files
 *.slo
 *.lo
