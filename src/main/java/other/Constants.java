@@ -14,5 +14,9 @@ public class Constants {
 	 * redirect URI that is in the settings of google drive
 	 */
 	public static final String REDIRECT_URI = "http://localhost:8080/COMP9323/controller";
+	/**
+	 * Use to sign jwt tokens
+	 */
+	public static final String JWT_TOKEN_SECRET= "The secret to success is to never reveal the secret";
 
 }
