@@ -4,8 +4,10 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
@@ -24,8 +26,9 @@ public class StormDriveService {
 		return Response.status(200).entity(output).build();
 	}
 
-	@POST
-	@Path("/setpassword")
+	@PUT
+	@Path("/user")
+	@Produces("text/html")
 	public Response setPassword ( @FormParam("username") String username,
 			@FormParam("password") String password){
 
@@ -41,10 +44,10 @@ public class StormDriveService {
 		}
 	}
 
-	@POST //because we don't want to put the password in the URL
-	@Path("/authenticate")
-	public Response login ( @FormParam("username") String username,
-			@FormParam("password") String password){
+	@GET
+	@Path("/user")
+	public Response login ( @DefaultValue("null") @QueryParam("username") String username,
+			@DefaultValue("null") @QueryParam("password") String password){
 
 		String output = "";
 		if (username != null && password != null && StormDrive.login(username, password)){
@@ -57,10 +60,11 @@ public class StormDriveService {
 			return Response.status(500).entity(output).build();
 		}
 	}
-
+	
 	@POST //because we don't want to put the password in the URL
-	@Path("/register")
-	public Response register ( @FormParam("givenname") String givenname,
+	@Path("/user")
+	@Produces("application/json")
+	public UserBean registerJSON ( @FormParam("givenname") String givenname,
 			@FormParam("surname") String surname,
 			@FormParam("username") String username,
 			@FormParam("password") String password,
@@ -76,11 +80,11 @@ public class StormDriveService {
 		if (valid && StormDrive.register(givenname, surname, username, password, email)){
 			output = "Registration Success!";
 			System.out.println(output);
-			return Response.status(200).entity(output).build();
+			return new UserBean(givenname,surname,username,password,email);
 		}else{
 			output = "Registration unsuccessful";
 			System.out.println(output);
-			return Response.status(500).entity(output).build();
+			return null;
 		}
 	}
 
@@ -116,4 +120,6 @@ public class StormDriveService {
 
 		return Response.status(200).entity(StormDrive.getDetails(username)).build();
 	}
+	
+	
 }
