@@ -181,7 +181,6 @@ public class Stormpath implements UserManagement{
 		return current;
 	}
 
-	@Override
 	public boolean setPassword(String username, String password) {
 		boolean found = false;
 		Account current = searchAccount(username);
@@ -193,7 +192,6 @@ public class Stormpath implements UserManagement{
 		return found;
 	}
 
-	@Override
 	public boolean createAccount(String givenName, String surname, String username, 
 			String password, String email, String group) {
 		boolean retval = false;
@@ -284,7 +282,6 @@ public class Stormpath implements UserManagement{
 
 	}
 
-	@Override
 	public ArrayList<String> getAuthorizationGroup(String username) {
 		ArrayList<String> groupList = new ArrayList<String>();
 		
@@ -294,7 +291,6 @@ public class Stormpath implements UserManagement{
 		return groupList;
 	}
 
-	@Override
 	public ArrayList<Permission> getPermission(String user) {
 		// TODO Auto-generated method stub
 		return null;

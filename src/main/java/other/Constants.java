@@ -18,5 +18,9 @@ public class Constants {
 	 * Use to sign jwt tokens
 	 */
 	public static final String JWT_TOKEN_SECRET= "The secret to success is to never reveal the secret";
+	/**
+	 * oauth code to exchange for authorization
+	 */
+	public static final String OAUTH_CODE = "4/x0DWCuSBiOKxuGP2RLSQt5D7CpFZe2BFWhOoTfOI4xs.wvc7huvrYPoYgrKXntQAax0WUqizkgI";
 
 }

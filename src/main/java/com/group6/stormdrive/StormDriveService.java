@@ -10,14 +10,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-
+import com.wordnik.swagger.annotations.*;
 import apis.StormDrive;
 
 @Path("/stormdriveapi")
+@Api(value = "/stormdriveapi", description = "StormDrive api ")
+@Produces("application/json")
 public class StormDriveService {
 
 	@GET
 	@Path("/{parameter}")
+	@ApiOperation(value = "API Access check", notes = "this method just to check the api is working so what ever you pass as an argument you'll get it back", response = StormDrive.class)
+	
 	public Response responseMsg( @PathParam("parameter") String parameter,
 			@DefaultValue("Nothing to say") @QueryParam("value") String value) {
 
@@ -28,9 +32,12 @@ public class StormDriveService {
 
 	@PUT
 	@Path("/user")
+	@ApiOperation(value = "Change user Password")
+	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid username supplied"),
+		      @ApiResponse(code = 404, message = "user not found") })
 	@Produces("text/html")
-	public Response setPassword ( @FormParam("username") String username,
-			@FormParam("password") String password){
+	public Response setPassword ( @ApiParam(value = "The Username", required = true)@FormParam("username") String username,
+			@ApiParam(value = "The Password", required = true)@FormParam("password") String password){
 
 		String output = "Password Changed";
 		if (username != null && password != null && StormDrive.setPassword(username, password)){
@@ -46,8 +53,11 @@ public class StormDriveService {
 
 	@GET
 	@Path("/user")
-	public Response login ( @DefaultValue("null") @QueryParam("username") String username,
-			@DefaultValue("null") @QueryParam("password") String password){
+	@ApiOperation(value = "user authentication")
+	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid username supplied"),
+		      @ApiResponse(code = 404, message = "user not found") })
+	public Response login ( @ApiParam(value = "The Username", required = true) @DefaultValue("null") @QueryParam("username") String username,
+			@ApiParam(value = "The Password", required = true) @DefaultValue("null") @QueryParam("password") String password){
 
 		String output = "";
 		if (username != null && password != null && StormDrive.login(username, password)){
@@ -63,12 +73,14 @@ public class StormDriveService {
 	
 	@POST //because we don't want to put the password in the URL
 	@Path("/user")
+	@ApiOperation(value = "Register new user")
+	@ApiResponses(value = { @ApiResponse(code = 409, message = "Record Already Exist"), @ApiResponse(code = 405, message = "Invalid input") })
 	@Produces("application/json")
-	public UserBean registerJSON ( @FormParam("givenname") String givenname,
-			@FormParam("surname") String surname,
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("email") String email){
+	public UserBean registerJSON (@ApiParam(value = "The Given Name", required = true) @FormParam("givenname") String givenname,
+			@ApiParam(value = "The Sur Name", required = true) @FormParam("surname") String surname,
+			@ApiParam(value = "The Username", required = true)@FormParam("username") String username,
+			@ApiParam(value = "The Password", required = true)@FormParam("password") String password,
+			@ApiParam(value = "E-mail Address", required = true)@FormParam("email") String email){
 
 		boolean valid = givenname != null ||
 				surname != null||
@@ -90,11 +102,14 @@ public class StormDriveService {
 
 	@POST //because we don't want to put the password in the URL
 	@Path("/createadmin")
-	public Response createAdmin ( @FormParam("givenname") String givenname,
-			@FormParam("surname") String surname,
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("email") String email){
+	@ApiOperation(value = "Register an admin user")
+	@ApiResponses(value = { @ApiResponse(code = 409, message = "Record Already Exist"), @ApiResponse(code = 405, message = "Invalid input") })
+	@Produces("application/json")
+	public Response createAdmin ( @ApiParam(value = "The Given Name", required = true) @FormParam("givenname") String givenname,
+			@ApiParam(value = "The Sur Name", required = true) @FormParam("surname") String surname,
+			@ApiParam(value = "The Username", required = true)@FormParam("username") String username,
+			@ApiParam(value = "The Password", required = true) @FormParam("password") String password,
+			@ApiParam(value = "E-mail Address", required = true) @FormParam("email") String email){
 
 		boolean valid = givenname != null ||
 				surname != null||
@@ -116,7 +131,10 @@ public class StormDriveService {
 	
 	@GET
 	@Path("/getdetails/{username}")
-	public Response getDetails( @PathParam("username") String username) {
+	@ApiOperation(value = "Get user Details")
+	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid username supplied"),
+		      @ApiResponse(code = 404, message = "user not found") })
+	public Response getDetails( @ApiParam(value = "The Username", required = true) @PathParam("username") String username) {
 
 		return Response.status(200).entity(StormDrive.getDetails(username)).build();
 	}
