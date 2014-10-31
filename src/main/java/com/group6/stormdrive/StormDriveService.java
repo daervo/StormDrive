@@ -4,10 +4,8 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import com.wordnik.swagger.annotations.*;
@@ -30,6 +28,7 @@ public class StormDriveService {
 		return Response.status(200).entity(output).build();
 	}
 
+<<<<<<< HEAD
 	@PUT
 	@Path("/user")
 	@ApiOperation(value = "Change user Password")
@@ -38,6 +37,12 @@ public class StormDriveService {
 	@Produces("text/html")
 	public Response setPassword ( @ApiParam(value = "The Username", required = true)@FormParam("username") String username,
 			@ApiParam(value = "The Password", required = true)@FormParam("password") String password){
+=======
+	@POST
+	@Path("/setpassword")
+	public Response setPassword ( @FormParam("username") String username,
+			@FormParam("password") String password){
+>>>>>>> parent of cf6d97d... fixed it. did the changes
 
 		String output = "Password Changed";
 		if (username != null && password != null && StormDrive.setPassword(username, password)){
@@ -51,6 +56,7 @@ public class StormDriveService {
 		}
 	}
 
+<<<<<<< HEAD
 	@GET
 	@Path("/user")
 	@ApiOperation(value = "user authentication")
@@ -58,6 +64,12 @@ public class StormDriveService {
 		      @ApiResponse(code = 404, message = "user not found") })
 	public Response login ( @ApiParam(value = "The Username", required = true) @DefaultValue("null") @QueryParam("username") String username,
 			@ApiParam(value = "The Password", required = true) @DefaultValue("null") @QueryParam("password") String password){
+=======
+	@POST //because we don't want to put the password in the URL
+	@Path("/authenticate")
+	public Response login ( @FormParam("username") String username,
+			@FormParam("password") String password){
+>>>>>>> parent of cf6d97d... fixed it. did the changes
 
 		String output = "";
 		if (username != null && password != null && StormDrive.login(username, password)){
@@ -70,8 +82,9 @@ public class StormDriveService {
 			return Response.status(500).entity(output).build();
 		}
 	}
-	
+
 	@POST //because we don't want to put the password in the URL
+<<<<<<< HEAD
 	@Path("/user")
 	@ApiOperation(value = "Register new user")
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Record Already Exist"), @ApiResponse(code = 405, message = "Invalid input") })
@@ -81,6 +94,14 @@ public class StormDriveService {
 			@ApiParam(value = "The Username", required = true)@FormParam("username") String username,
 			@ApiParam(value = "The Password", required = true)@FormParam("password") String password,
 			@ApiParam(value = "E-mail Address", required = true)@FormParam("email") String email){
+=======
+	@Path("/register")
+	public Response register ( @FormParam("givenname") String givenname,
+			@FormParam("surname") String surname,
+			@FormParam("username") String username,
+			@FormParam("password") String password,
+			@FormParam("email") String email){
+>>>>>>> parent of cf6d97d... fixed it. did the changes
 
 		boolean valid = givenname != null ||
 				surname != null||
@@ -92,11 +113,11 @@ public class StormDriveService {
 		if (valid && StormDrive.register(givenname, surname, username, password, email)){
 			output = "Registration Success!";
 			System.out.println(output);
-			return new UserBean(givenname,surname,username,password,email);
+			return Response.status(200).entity(output).build();
 		}else{
 			output = "Registration unsuccessful";
 			System.out.println(output);
-			return null;
+			return Response.status(500).entity(output).build();
 		}
 	}
 
@@ -138,6 +159,4 @@ public class StormDriveService {
 
 		return Response.status(200).entity(StormDrive.getDetails(username)).build();
 	}
-	
-	
 }
