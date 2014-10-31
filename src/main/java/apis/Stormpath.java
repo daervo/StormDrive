@@ -63,7 +63,10 @@ public class Stormpath implements UserManagement{
 		String path = Constants.APIKEY_PATH;
 
 		@SuppressWarnings("deprecation")
-		ApiKey apiKey = ApiKeys.builder().setFileLocation(path).build();
+		ApiKey apiKey = ApiKeys.builder()
+				.setId("45M2TJ9X0C3NDS5Q3OLV8CYAQ")
+				.setSecret("J9chUzNiyAE74+rZr1i2ftaE9uA2U4vGtzg7oXof+OU")
+				.build();
 		client = Clients.builder().setApiKey(apiKey)
 			    .setAuthenticationScheme(AuthenticationScheme.BASIC)
 			    .build();
